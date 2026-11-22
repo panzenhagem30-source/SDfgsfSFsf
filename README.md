@@ -1,65 +1,53 @@
-# POC Android Farm com WireGuard por dispositivo (location-based)
+ROUBE UM MONSTRO — UPDATE COMPLETO 3D
+Entre na arena, treine sua força, enfrente criaturas cada vez mais perigosas e roube monstros raros para dominar todas as 8 fases!
 
-Este repositório contém um Proof-of-Concept (POC) para uma "fazenda" de emuladores Android que permite rotear cada dispositivo virtual por um túnel WireGuard para uma localização/região específica. O objetivo é permitir que cada "telefone" tenha tráfego de saída com IP geolocalizado conforme o exit node WireGuard configurado.
+ROUBE UM MONSTRO — UPDATE COMPLETO 3D é um simulador de ação, progressão e coleta em 3D com controles dedicados para PC, sistema completo de contas com salvamento e login automático, NPCs com IA agressiva que escalam conforme você avança e um mundo vibrante dividido entre Lobby interativo, Área de Treinamento, Lojas Físicas e o Corredor de Raridades.
 
-AVISO: este POC é para fins de desenvolvimento/testes. Não exponha ADB ou containers sem proteção adequada em produção. Respeite termos de serviço e leis locais ao enviar automações, SMS ou uso de IPs.
+Principais destaques do jogo
+1. Sistema de contas, login, registro e salvamento automático
+Crie sua conta ou faça login: Cadastre seu perfil com nome de usuário, senha e cor personalizada para o seu traje 3D.
 
-Conteúdo do POC
-- docker-compose.yml: orchestrador para levantar 1 emulador Android, backend FastAPI, worker e Redis.
-- android/: Dockerfile e scripts para construir o container Android com WireGuard.
-- backend/: FastAPI simples com endpoints para listar dispositivos e enfileirar jobs.
-- worker/: executor simples que consome Redis e executa comandos ADB (tap, text, screencap).
-- artifacts/: pasta para screenshots e artefatos produzidos pelos jobs.
+Login automático e contas rápidas: Salve sua sessão para entrar direto ao abrir o jogo e acesse facilmente outras contas criadas no PC com cartões de perfil rápido.
 
-Pré-requisitos
-- Docker e docker-compose instalados no host.
-- Kernel com suporte a WireGuard (ou executar WireGuard no host e compartilhar network namespace).
-- adb disponível dentro do container android (a imagem base já inclui adb). Para usar ADB local, instale adb no host.
+Progresso persistente: Coins, Gems, Força, HP, Rebirths, espadas, auras, trails, monstros capturados e fases desbloqueadas são salvos automaticamente, com opção de exportar e importar backup em .json.
 
-Passos rápidos (POC)
+2. Combate com IA agressiva e dificuldade progressiva por fase
+Inimigos que perseguem e contra-atacam: Os monstros das arenas detectam sua presença, avançam contra você e realizam ataques com barra de vida, efeitos de impacto e dano real na sua barra de HP.
 
-1) Preparar exit nodes WireGuard
- - Crie VMs/Servers nas regiões desejadas (ex.: Brazil, US, DE) e instale WireGuard server em cada uma.
- - Gere pares de chaves para cada peer (cada device/container terá sua pair).
- - Para cada device/container crie um arquivo wg0.conf que aponte para o servidor WireGuard escolhido (peer private key, AllowedIPs = 0.0.0.0/0, Endpoint ip:port).
+Escalonamento real nas 8 fases: A cada nova área desbloqueada (Comum, Incomum, Raro, Épico, Lendário, Mítico, Divino e Ultra), os NPCs ficam mais fortes, rápidos e resistentes — exigindo melhor equipamento, mais treinamento e estratégia.
 
-2) Coloque o wg0.conf para o container android em `./android/wg/wg0.conf`
+Roube e equipe monstros: Derrote criaturas para tentar capturá-las e levá-las para o seu inventário, acompanhando seu personagem em 3D.
 
-3) Build & Up
+3. Treinamento, espadas, auras e trails
+Área de treinamento: Treine em sacos e bonecos de dificuldade crescente para elevar sua Força e ganhar recompensas.
 
-```bash
-docker-compose up --build
-```
+Arsenal de espadas 3D: Desbloqueie e equipe espadas com visuais progressivos, efeitos visuais, animações de ataque e diferentes poderes de dano (da Espada de Madeira até a Espada Ultra).
 
-4) Teste
- - Acesse backend: http://localhost:8000
- - Criar job (exemplo):
-   POST /jobs
-   {
-     "device": "127.0.0.1:5555",
-     "actions": [{"type":"screencap","name":"t1.png"}]
-   }
- - Verifique `artifacts/` para screenshots.
+Auras e trails: Personalize seu personagem com auras 3D animadas e rastros visuais ao se mover, pular ou correr.
 
-Arquivos principais (descrição rápida)
+4. Lobby interativo e HUD estilo simulador
+Lojas físicas e portais: Explore o lobby com vitrines 3D giratórias, estações de compra, área de treinamento, portais e acesso direto ao corredor de raridades.
 
-- docker-compose.yml: define os serviços `redis`, `backend`, `worker`, `android_emulator`.
-- android/Dockerfile: imagem baseada em um emulador Android pública, instala wireguard-tools e copia o `entrypoint.sh`.
-- android/entrypoint.sh: ativa o wg-quick se `wg0.conf` existir e depois inicia o emulador (ajuste conforme a imagem base).
-- backend/app/main.py: FastAPI mínimo com endpoints `/devices`, `/jobs` e `/health`.
-- worker/worker.py: consumidor Redis que executa comandos ADB para ações: tap, text, screencap.
-- README.md: este arquivo com instruções rápidas.
+Menu lateral completo (HUD): Acesso rápido a Shop, Backpack, Rebirth, Teleport, Worlds, Rewards, Tools, Auras e Trails, além de barra superior com HP, Monstros, Coins, Gems, Códigos, Configurações e Sair.
 
-Notas importantes e limitações
-- O uso de WireGuard dentro de containers requer privilégios (NET_ADMIN) e suporte no kernel do host. Alternativa: executar WireGuard no host e compartilhar o namespace de rede do host com o container.
-- Emuladores Android em container podem requerer KVM/GPU e ajustes dependendo do host. Nem todas as imagens públicas funcionam sem configuração adicional.
-- IPs obtidos via VPS datacenter serão geolocalizados para o datacenter. Se precisar de IPs residenciais ou de operadora móvel, considere provedores de proxies residenciais ou gateways SIM (custo e legalidade a considerar).
-- Segurança: não exponha ADB na internet sem restrições, use redes privadas e firewalls.
+Controles (PC)
+WASD / setas: Movimentar o personagem
 
-Próximos passos que posso automatizar para você
-- Ajustar docker-compose para múltiplos dispositivos (naming dinâmico e portas ADB mapeadas).
-- Gerar scripts para criar pares WireGuard (server/client) e facilitar a criação de wg0.conf para cada device.
-- Adicionar PostgreSQL para persistência, autenticação e frontend React.
-- Criar repositório, commitar todo o scaffold e abrir PR com instruções CI/CD e deploy em Kubernetes.
+Shift: Correr
 
-Se quiser que eu comite este scaffold neste repositório agora, responda confirmando a mensagem de commit desejada. Por padrão usarei: "POC: add android-farm scaffold README".
+Espaço: Pular
+
+Clique esquerdo ou F: Atacar / interagir no combate
+
+Botão direito (arrastar): Girar a câmera em 3D
+
+Scroll do mouse: Zoom da câmera
+
+E: Interagir com estações e portais próximos
+
+Atalhos rápidos: B (Mochila), T (Espadas), R (Rebirth), M (Fases)
+
+Versão curta (para redes sociais, Discord ou loja)
+ROUBE UM MONSTRO — UPDATE COMPLETO 3D chegou para PC! Crie sua conta com salvamento automático e login rápido, treine sua força, equipe espadas 3D, auras e trails, e enfrente NPCs cada vez mais agressivos e difíceis ao longo de 8 fases de raridade (do Comum ao Ultra). Derrote monstros, roube os melhores para o seu time e faça Rebirth para dominar o ranking!
+
+Quer que eu ajuste essa descrição para um formato específico (como descrição de loja de apps/APK, post de divulgação, patch notes ou ficha técnica)?
