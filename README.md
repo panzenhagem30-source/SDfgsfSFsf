@@ -51,3 +51,12 @@ Versão curta (para redes sociais, Discord ou loja)
 ROUBE UM MONSTRO — UPDATE COMPLETO 3D chegou para PC! Crie sua conta com salvamento automático e login rápido, treine sua força, equipe espadas 3D, auras e trails, e enfrente NPCs cada vez mais agressivos e difíceis ao longo de 8 fases de raridade (do Comum ao Ultra). Derrote monstros, roube os melhores para o seu time e faça Rebirth para dominar o ranking!
 
 Quer que eu ajuste essa descrição para um formato específico (como descrição de loja de apps/APK, post de divulgação, patch notes ou ficha técnica)?
+
+
+
+
+
+
+
+jogo
+https://sites.google.com/view/roube-um-mostre/full-page-embed
